@@ -18,16 +18,18 @@ const Home = ({ sectionz}) => {
                     bg-cover bg-no-repeat 
                     ' style={{backgroundImage: `url(${section.imageUrl})`
                     }}>
-                        <h1 className='text-gray-700
+                        <div className='text-gray-700
                          opacity-70 
                          hover:opacity-60 
                          my-20 mx-28 
                          cursor-pointer 
                          bg-gray-50 text-center  
                          inline-block border 
-                         border-white 
-                         p-10 text-4xl' 
-                         >{section.title}</h1>
+                         border-black 
+                         p-10 ' 
+                         ><h1 className=' text-4xl'>{section.title}</h1>
+                         <h4 className='font-medium italic text-lg font'>{section.subtitle}</h4>                         
+                         </div>
                     </div>
                     </div>
                 ))}
