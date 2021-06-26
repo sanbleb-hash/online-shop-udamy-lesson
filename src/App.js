@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route  } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route ,Redirect } from 'react-router-dom'
 import Home from './pages/Home'
 import { sections } from './data/directory.data'
 import ShopPage from './components/ShopPage'
@@ -7,18 +7,19 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import React from 'react';
 import { auth, createUserProfileDocument } from './fireBase/firebase.utils';
+import { connect } from 'react-redux';
+import { setCurrentUser } from './Redux/user/user.action'
 
 
 class App extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      currentUser: null
-    }
-  }
+  
+  
+
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    
+    const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
    
@@ -26,7 +27,7 @@ class App extends React.Component{
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapShot=>{
-          this.setState({
+          setCurrentUser({
             currentUser: {
               id: snapShot.id,
               ...snapShot.data()
@@ -35,7 +36,7 @@ class App extends React.Component{
         })
      
       }
-     
+     setCurrentUser(userAuth);
      } )
   }
   
@@ -46,14 +47,14 @@ class App extends React.Component{
     render(){
       return(
       <Router className='font-word'>
-      <Header currentUser={this.state.currentUser}/>
+      <Header />
       <Switch>
         <Route path='/' exact> 
         <Home sectionz={sections} />
       </Route> 
        <Route path='/shop' component={ShopPage}  /> 
-       <Route path='/signin' component={SignIn}  /> 
-       <Route path='/signup' component={SignUp}  /> 
+       <Route  path='/signUp' component={SignIn} /> 
+       <Route path='/signin' exact render={()=> this.props.currentUser ? (<Redirect to='/'/>) : <SignUp /> } /> 
        </Switch>      
     </Router>
   );
@@ -61,4 +62,17 @@ class App extends React.Component{
        
 }
 
-export default App;
+const mapStateToprops = ({user})=> ({
+  currentUser: user.currentUser
+ })
+
+const mapDispatchToProps = (dispatch) => ({
+setCurrentUser: user => dispatch(setCurrentUser(user))
+
+});
+
+
+export default connect(
+  mapStateToprops,
+  mapDispatchToProps
+  ) (App);

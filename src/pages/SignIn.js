@@ -44,7 +44,7 @@ render() {
     return (
         <div  className='space-y-2 h-screen w-full'>
         
-            <h2 className='text-2xl text-blue-200 text-center pt-10'>sign up or<Link to='/signUp' className='text-blue-900'> sing in</Link> with your email and password</h2>
+            <h2 className='text-2xl text-blue-200 text-center pt-10'>sign up or<Link to='/signin' className='text-blue-900'> sing in</Link> with your email and password</h2>
         <form  onSubmit={ this.handleSubmit } className=' space-y-2 text-gray-500 h-4/6 flex justify-center flex-col items-center'>
             <div className='flex flex-col w-1/2 '>
             <label>Email</label> 
